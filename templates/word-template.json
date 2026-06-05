@@ -1,0 +1,28 @@
+[
+  {
+    "word_id": "W1001",
+    "english": "apple",
+    "japanese": "りんご",
+    "grade_level": 1,
+    "category_id": "fruit",
+    "category_name": "果物",
+    "pronunciation": "ˈæp.l",
+    "example_en": "I like apples.",
+    "example_ja": "私はりんごが好きです。",
+    "difficulty": "easy",
+    "active": true
+  },
+  {
+    "word_id": "W1002",
+    "english": "car",
+    "japanese": "車",
+    "grade_level": 2,
+    "category_id": "vehicle",
+    "category_name": "乗り物",
+    "pronunciation": "",
+    "example_en": "This is a car.",
+    "example_ja": "これは車です。",
+    "difficulty": "easy",
+    "active": true
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "name": "kids-english-word-trainer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "小学生向け英単語学習アプリ MVP",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/core.js && node --check src/app.js"
+  },
+  "devDependencies": {}
+}
