@@ -16,7 +16,7 @@ const el = {
   homeMessage: document.querySelector("#home-message"),
   startStudyButton: document.querySelector("#start-study-button"),
   startTestButton: document.querySelector("#start-test-button"),
-  reviewButton: document.querySelector("#review-button"),
+  studyStartButton: document.querySelector("#study-start-button"),
   showWordListButton: document.querySelector("#show-word-list-button"),
   studyCounter: document.querySelector("#study-counter"),
   wordCard: document.querySelector("#word-card"),
@@ -99,7 +99,6 @@ function renderHome() {
       ? `${set.testAvailableFrom}〜${set.testAvailableUntil}`
       : set.testAvailableFrom
     : "未定";
-  const failedCount = Object.values(state.histories).filter((history) => history.status === "failed").length;
   el.homeStatus.innerHTML = [
     ["学習モード", modeLabel],
     ["学習中の単語", `${words.length}語`],
@@ -109,7 +108,6 @@ function renderHome() {
   ].map(([label, value]) => `<div class="status-item"><span>${label}</span><strong>${value}</strong></div>`).join("");
   el.startStudyButton.disabled = false;
   el.startTestButton.disabled = !Core.setIsTestable(set);
-  el.reviewButton.disabled = failedCount === 0;
 }
 
 function renderStudy() {
@@ -149,7 +147,7 @@ function syncSettingsForm(form, categoryOptions) {
   categoryOptions.innerHTML = Core.CATEGORIES.map((category) => `
     <label class="check-chip">
       <input type="radio" name="selectedCategoryId" value="${category.id}" ${selectedCategoryId === category.id ? "checked" : ""} />
-      ${category.name}
+      <span>${category.name}</span>
     </label>
   `).join("");
 }
@@ -374,14 +372,6 @@ function startStudy() {
   }
   studyIndex = 0;
   reviewWordIds = [];
-  switchView("study");
-}
-
-function startReview() {
-  reviewWordIds = Object.values(state.histories)
-    .filter((history) => history.status === "failed")
-    .map((history) => history.wordId);
-  studyIndex = 0;
   switchView("study");
 }
 
@@ -632,7 +622,7 @@ function escapeHtml(value) {
 el.navButtons.forEach((button) => button.addEventListener("click", () => switchView(button.dataset.view)));
 el.startStudyButton.addEventListener("click", startStudy);
 el.startTestButton.addEventListener("click", startTest);
-el.reviewButton.addEventListener("click", startReview);
+el.studyStartButton.addEventListener("click", startStudy);
 el.showWordListButton.addEventListener("click", showLearningWordList);
 el.closeWordListButton.addEventListener("click", () => el.wordListDialog.close());
 el.nextWordButton.addEventListener("click", moveNextWord);

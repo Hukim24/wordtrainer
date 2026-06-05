@@ -121,6 +121,13 @@ nav {
   margin-bottom: 24px;
 }
 
+.heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .status-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(160px, 1fr));
@@ -385,13 +392,23 @@ fieldset {
 
 .check-chip {
   display: flex !important;
-  grid-template-columns: auto 1fr;
   align-items: center;
   gap: 6px !important;
+  min-width: 0;
   padding: 8px 10px;
   border-radius: 8px;
   background: var(--soft);
   color: var(--ink) !important;
+}
+
+.check-chip input {
+  flex: 0 0 auto;
+}
+
+.check-chip span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .word-form {
@@ -588,6 +605,7 @@ th {
   }
 
   .page-heading,
+  .heading-actions,
   .action-row,
   .data-actions {
     align-items: stretch;
