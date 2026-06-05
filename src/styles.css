@@ -1,15 +1,15 @@
 :root {
   color-scheme: light;
-  --ink: #18212f;
-  --muted: #5f6b7a;
-  --line: #d9e1ec;
+  --ink: #2d1518;
+  --muted: #7d5f63;
+  --line: #f0ccd0;
   --panel: #ffffff;
-  --bg: #eef5f3;
-  --primary: #1f7a6a;
-  --primary-dark: #15584c;
-  --accent: #e9b44c;
-  --danger: #b94a48;
-  --soft: #f6f8fb;
+  --bg: #fff6f7;
+  --primary: #d7263d;
+  --primary-dark: #a8192b;
+  --accent: #ffe6e9;
+  --danger: #b0162a;
+  --soft: #fff0f2;
   font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
 }
 
@@ -207,24 +207,24 @@ nav {
 }
 
 .secondary-button {
-  background: #dfeeea;
+  background: #ffe2e6;
   color: var(--primary-dark);
 }
 
 .secondary-link {
-  background: #eef3f0;
+  background: #fff0f2;
   color: var(--primary-dark);
 }
 
 .danger-button {
-  background: #f4dddd;
+  background: #f9d7dc;
   color: var(--danger);
 }
 
 .file-button {
   position: relative;
   background: var(--accent);
-  color: #2f240c;
+  color: var(--primary-dark);
   cursor: pointer;
 }
 
@@ -310,7 +310,7 @@ nav {
 
 .choice:has(input:checked) {
   border-color: var(--primary);
-  background: #e7f3ef;
+  background: #fff0f2;
 }
 
 .score-line {
@@ -328,11 +328,11 @@ nav {
 }
 
 .score-line.passed {
-  background: #e5f3e8;
+  background: #fff0f2;
 }
 
 .score-line.failed {
-  background: #f8e5e1;
+  background: #f9d7dc;
 }
 
 .result-columns {
@@ -490,13 +490,13 @@ th {
 }
 
 .answer-item.correct span {
-  background: #dff0e4;
-  color: #17623f;
+  background: #fff0f2;
+  color: var(--primary-dark);
 }
 
 .answer-item.incorrect span {
-  background: #f6dfdc;
-  color: #9b3d39;
+  background: #f9d7dc;
+  color: var(--danger);
 }
 
 .word-list-dialog {
