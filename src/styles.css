@@ -393,6 +393,7 @@ fieldset {
 .check-chip {
   display: flex !important;
   align-items: center;
+  justify-content: flex-start;
   gap: 6px !important;
   min-width: 0;
   padding: 8px 10px;
@@ -403,9 +404,14 @@ fieldset {
 
 .check-chip input {
   flex: 0 0 auto;
+  width: auto;
+  min-height: auto;
+  margin: 0;
 }
 
 .check-chip span {
+  display: block;
+  flex: 1 1 auto;
   min-width: 0;
   overflow-wrap: anywhere;
   white-space: normal;
