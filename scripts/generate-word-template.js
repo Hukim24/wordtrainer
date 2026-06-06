@@ -15,7 +15,6 @@ const categories = {
   house: "家の中",
   place: "場所",
   job: "職業",
-  action: "動作",
   feeling: "気持ち",
   daily_life: "日常生活"
 };
@@ -65,7 +64,7 @@ const nouns = {
     ["morning", "朝"], ["afternoon", "午後"], ["evening", "夕方"], ["night", "夜"], ["week", "週"]
   ],
   weather: [
-    ["sunny", "晴れ"], ["rainy", "雨の"], ["cloudy", "くもりの"], ["windy", "風の強い"], ["snowy", "雪の"],
+    ["sunny", "晴れ"], ["rainy", "雨"], ["cloudy", "くもり"], ["windy", "風が強い"], ["snowy", "雪"],
     ["hot", "暑い"], ["cold", "寒い"], ["warm", "暖かい"], ["cool", "涼しい"], ["storm", "嵐"],
     ["rain", "雨"], ["snow", "雪"], ["wind", "風"], ["sky", "空"], ["cloud", "雲"]
   ],
@@ -90,12 +89,6 @@ const nouns = {
     ["doctor", "医者"], ["teacher", "先生"], ["artist", "芸術家"], ["engineer", "技術者"], ["nurse", "看護師"],
     ["farmer", "農家"], ["driver", "運転手"], ["pilot", "パイロット"], ["cook", "料理人"], ["singer", "歌手"],
     ["writer", "作家"], ["police officer", "警察官"], ["firefighter", "消防士"], ["dentist", "歯医者"], ["scientist", "科学者"]
-  ],
-  action: [
-    ["run", "走る"], ["walk", "歩く"], ["jump", "跳ぶ"], ["eat", "食べる"], ["drink", "飲む"], ["read", "読む"],
-    ["write", "書く"], ["listen", "聞く"], ["speak", "話す"], ["sing", "歌う"], ["dance", "踊る"], ["draw", "描く"],
-    ["make", "作る"], ["open", "開ける"], ["close", "閉める"], ["clean", "掃除する"], ["wash", "洗う"],
-    ["help", "助ける"], ["study", "勉強する"], ["practice", "練習する"], ["decide", "決める"], ["explain", "説明する"]
   ],
   feeling: [
     ["happy", "うれしい"], ["sad", "悲しい"], ["angry", "怒った"], ["tired", "疲れた"], ["sleepy", "眠い"],
@@ -181,6 +174,7 @@ function uniqueEntriesForGrade(grade, globalSeen) {
 
 function candidatesForCategory(categoryId, grade) {
   const base = [...nouns[categoryId], ...categoryCombos(categoryId)];
+  if (["vehicle", "weather", "job", "feeling"].includes(categoryId)) return base;
   const possessive = nouns[categoryId].flatMap(([nounEn, nounJa]) => [
     [`my ${nounEn}`, `私の${nounJa}`],
     [`your ${nounEn}`, `あなたの${nounJa}`],
@@ -193,28 +187,48 @@ function candidatesForCategory(categoryId, grade) {
 
 function categoryCombos(categoryId) {
   if (categoryId === "color") {
-    const colorNouns = [...nouns.fruit, ...nouns.animal, ...nouns.vehicle, ...nouns.house.slice(0, 10)];
-    return nouns.color.flatMap(([colorEn, colorJa]) => colorNouns.map(([nounEn, nounJa]) => [`${colorEn} ${nounEn}`, `${colorJa}の${nounJa}`]));
+    const tones = [
+      ["light", "明るい"], ["dark", "濃い"], ["deep", "深い"], ["pale", "淡い"], ["soft", "やわらかい"],
+      ["bright", "鮮やかな"], ["clear", "はっきりした"], ["warm", "暖かい"], ["cool", "涼しげな"], ["favorite", "好きな"],
+      ["school", "学校で使う"], ["basic", "基本の"], ["pretty", "きれいな"], ["simple", "かんたんな"], ["new", "新しい"]
+    ];
+    return nouns.color.flatMap(([colorEn, colorJa]) => tones.map(([toneEn, toneJa]) => [`${toneEn} ${colorEn}`, `${toneJa}${colorJa}`]));
   }
 
-  if (categoryId === "action") {
-    const adverbs = [
-      ["fast", "速く"], ["slowly", "ゆっくり"], ["well", "上手に"], ["together", "一緒に"], ["again", "もう一度"],
-      ["every day", "毎日"], ["at school", "学校で"], ["at home", "家で"], ["in the morning", "朝に"], ["after lunch", "昼食後に"]
+  if (categoryId === "vehicle") {
+    const vehicleTypes = [
+      ["toy", "おもちゃの"], ["model", "模型の"], ["electric", "電動の"], ["fast", "速い"], ["slow", "ゆっくりの"],
+      ["safe", "安全な"], ["new", "新しい"], ["old", "古い"], ["small", "小型の"], ["large", "大型の"],
+      ["long", "長い"], ["short", "短い"], ["passenger", "乗客用の"], ["cargo", "荷物用の"], ["rescue", "救助用の"]
     ];
-    return nouns.action.flatMap(([verbEn, verbJa]) => adverbs.map(([adverbEn, adverbJa]) => [`${verbEn} ${adverbEn}`, `${adverbJa}${verbJa}`]));
+    return nouns.vehicle.flatMap(([vehicleEn, vehicleJa]) => vehicleTypes.map(([typeEn, typeJa]) => [`${typeEn} ${vehicleEn}`, `${typeJa}${vehicleJa}`]));
   }
 
   if (categoryId === "feeling") {
-    const stems = [
-      ["feel", "感じる"], ["look", "見える"], ["become", "になる"], ["sound", "に聞こえる"], ["stay", "のままでいる"]
+    const feelingContexts = [
+      ["very", "とても"], ["a little", "少し"], ["still", "まだ"], ["really", "本当に"], ["sometimes", "時々"],
+      ["today", "今日は"], ["now", "今"], ["after class", "授業の後で"], ["before test", "テスト前に"], ["with friends", "友だちといて"],
+      ["at school", "学校で"], ["at home", "家で"], ["on Monday", "月曜日に"], ["in the morning", "朝に"], ["at night", "夜に"]
     ];
-    return nouns.feeling.flatMap(([feelingEn, feelingJa]) => stems.map(([stemEn, stemJa]) => [`${stemEn} ${feelingEn}`, `${feelingJa}${stemJa}`]));
+    return nouns.feeling.flatMap(([feelingEn, feelingJa]) => feelingContexts.map(([contextEn, contextJa]) => [`${contextEn} ${feelingEn}`, `${contextJa}${feelingJa}`]));
   }
 
   if (categoryId === "weather") {
-    const weatherNouns = [["day", "日"], ["morning", "朝"], ["afternoon", "午後"], ["weekend", "週末"], ["sky", "空"]];
-    return nouns.weather.flatMap(([weatherEn, weatherJa]) => weatherNouns.map(([nounEn, nounJa]) => [`${weatherEn} ${nounEn}`, `${weatherJa}の${nounJa}`]));
+    const weatherContexts = [
+      ["today is", "今日は"], ["tomorrow is", "明日は"], ["morning is", "朝は"], ["afternoon is", "午後は"], ["weekend is", "週末は"],
+      ["this week is", "今週は"], ["next week is", "来週は"], ["school day is", "学校の日は"], ["holiday is", "休日は"], ["outside is", "外は"],
+      ["spring", "春の"], ["summer", "夏の"], ["fall", "秋の"], ["winter", "冬の"], ["evening is", "夕方は"]
+    ];
+    return nouns.weather.flatMap(([weatherEn, weatherJa]) => weatherContexts.map(([contextEn, contextJa]) => [`${contextEn} ${weatherEn}`, `${contextJa}${weatherJa}`]));
+  }
+
+  if (categoryId === "job") {
+    const jobPlaces = [
+      ["school", "学校の"], ["hospital", "病院の"], ["town", "町の"], ["airport", "空港の"], ["station", "駅の"],
+      ["zoo", "動物園の"], ["museum", "博物館の"], ["restaurant", "レストランの"], ["farm", "農場の"], ["library", "図書館の"],
+      ["kind", "親切な"], ["busy", "忙しい"], ["new", "新しい"], ["famous", "有名な"], ["young", "若い"]
+    ];
+    return nouns.job.flatMap(([jobEn, jobJa]) => jobPlaces.map(([placeEn, placeJa]) => [`${placeEn} ${jobEn}`, `${placeJa}${jobJa}`]));
   }
 
   if (categoryId === "day_week") {

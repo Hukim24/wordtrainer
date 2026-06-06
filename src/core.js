@@ -22,7 +22,6 @@
     ["house", "家の中"],
     ["place", "場所"],
     ["job", "職業"],
-    ["action", "動作"],
     ["feeling", "気持ち"],
     ["daily_life", "日常生活"]
   ].map(([id, name]) => ({ id, name }));
@@ -58,8 +57,6 @@
     ["W0015", "father", "父", 2, "family", "家族", "My father cooks.", "私の父は料理します。"],
     ["W0016", "school", "学校", 2, "school", "学校", "I go to school.", "私は学校へ行きます。"],
     ["W0017", "book", "本", 2, "school", "学校", "This book is fun.", "この本は楽しいです。"],
-    ["W0018", "run", "走る", 2, "action", "動作", "I can run fast.", "私は速く走れます。"],
-    ["W0019", "eat", "食べる", 2, "action", "動作", "I eat rice.", "私はごはんを食べます。"],
     ["W0020", "happy", "うれしい", 2, "feeling", "気持ち", "I am happy.", "私はうれしいです。"],
     ["W0021", "rice", "ごはん", 3, "food", "食べ物", "Rice is hot.", "ごはんは温かいです。"],
     ["W0022", "bread", "パン", 3, "food", "食べ物", "I eat bread.", "私はパンを食べます。"],
@@ -87,8 +84,6 @@
     ["W0044", "question", "質問", 5, "school", "学校", "I have a question.", "質問があります。"],
     ["W0045", "shoulder", "肩", 5, "body", "体", "My shoulder hurts.", "肩が痛いです。"],
     ["W0046", "finger", "指", 5, "body", "体", "I point with my finger.", "私は指でさします。"],
-    ["W0047", "clean", "掃除する", 5, "action", "動作", "I clean my room.", "私は部屋を掃除します。"],
-    ["W0048", "listen", "聞く", 5, "action", "動作", "Please listen.", "聞いてください。"],
     ["W0049", "strong", "強い", 5, "daily_life", "日常生活", "The wind is strong.", "風が強いです。"],
     ["W0050", "quiet", "静かな", 5, "daily_life", "日常生活", "This room is quiet.", "この部屋は静かです。"],
     ["W0051", "future", "未来", 6, "daily_life", "日常生活", "The future is bright.", "未来は明るいです。"],
@@ -99,8 +94,6 @@
     ["W0056", "museum", "博物館", 6, "place", "場所", "I visit a museum.", "私は博物館へ行きます。"],
     ["W0057", "engineer", "技術者", 6, "job", "職業", "An engineer makes things.", "技術者はものを作ります。"],
     ["W0058", "artist", "芸術家", 6, "job", "職業", "The artist paints.", "芸術家が絵を描きます。"],
-    ["W0059", "decide", "決める", 6, "action", "動作", "I decide today.", "私は今日決めます。"],
-    ["W0060", "explain", "説明する", 6, "action", "動作", "Please explain it.", "それを説明してください。"]
   ].map(([wordId, english, japanese, gradeLevel, categoryId, categoryName, exampleEn, exampleJa]) => ({
     wordId,
     english,
