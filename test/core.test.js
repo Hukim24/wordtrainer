@@ -101,6 +101,18 @@ test("learning set stays active until test submission or explicit finish", () =>
   assert.ok(generated.set.wordIds.every((wordId) => state.histories[wordId].status === "new"));
 });
 
+test("finishing active learning sets clears the active set without test records", () => {
+  let state = Core.initialState();
+  state.settings.wordCount = 2;
+  const generated = Core.generateLearningSet(state, new Date("2026-06-06T09:00:00"));
+  state = Core.finishActiveLearningSets(generated.state);
+
+  assert.equal(Core.activeSet(state), undefined);
+  assert.equal(state.learningSets[0].status, "completed");
+  assert.equal(state.testResults.length, 0);
+  assert.equal(state.activityRecords.length, 0);
+});
+
 test("import validation reports required field and duplicate errors", () => {
   const rows = [
     {

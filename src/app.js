@@ -480,22 +480,28 @@ function saveSettings(event) {
   const form = event.currentTarget;
   const selectedCategory = el.homeCategoryOptions.querySelector("input:checked");
   const selectedCategoryIds = selectedCategory ? [selectedCategory.value] : [];
-  state = {
-    ...state,
-    settings: {
-      ...state.settings,
-      learningMode: form.learningMode.value,
-      wordCount: Number(form.wordCount.value),
-      gradeLevel: Number(form.gradeLevel.value),
-      categoryMode: form.categoryMode.value,
-      selectedCategoryIds,
-      passThresholdRate: Number(form.passThresholdRate.value),
-      cooldownDays: Number(form.cooldownDays.value),
-      testFormat: form.testFormat.value
-    }
+  const nextSettings = {
+    ...state.settings,
+    learningMode: form.learningMode.value,
+    wordCount: Number(form.wordCount.value),
+    gradeLevel: Number(form.gradeLevel.value),
+    categoryMode: form.categoryMode.value,
+    selectedCategoryIds,
+    passThresholdRate: Number(form.passThresholdRate.value),
+    cooldownDays: Number(form.cooldownDays.value),
+    testFormat: form.testFormat.value
   };
+  const settingsChanged = JSON.stringify(state.settings) !== JSON.stringify(nextSettings);
+  state = { ...state, settings: nextSettings };
+  if (settingsChanged) {
+    state = Core.finishActiveLearningSets(state);
+    studyIndex = 0;
+    reviewWordIds = [];
+  }
   saveState();
-  el.homeMessage.textContent = "設定を保存しました。次回の単語生成から反映されます。";
+  el.homeMessage.textContent = settingsChanged
+    ? "設定を保存しました。次に始めると新しい設定で単語を用意します。"
+    : "設定を保存しました。";
   render();
 }
 

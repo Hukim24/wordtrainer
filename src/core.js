@@ -320,6 +320,12 @@
     };
   }
 
+  function finishActiveLearningSets(state) {
+    return state.learningSets
+      .filter((set) => set.status === "learning" || set.status === "test_available")
+      .reduce((nextState, set) => finishLearningSet(nextState, set.setId), state);
+  }
+
   function wordsForSet(state, set) {
     if (!set) return [];
     return set.wordIds.map((wordId) => state.words.find((word) => word.wordId === wordId)).filter(Boolean);
@@ -524,6 +530,7 @@
     addDays,
     activeSet,
     createQuestions,
+    finishActiveLearningSets,
     finishLearningSet,
     generateLearningSet,
     getCategoryName,
