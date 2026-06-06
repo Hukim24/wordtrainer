@@ -194,7 +194,7 @@
     return Boolean(history.cooldownUntil && history.cooldownUntil >= today);
   }
 
-  function rankWords(words, histories, today) {
+  function rankWords(words, histories, today, random = Math.random) {
     const score = (word) => {
       const history = historyFor(histories, word.wordId);
       if (history.status === "new") return 0;
@@ -202,7 +202,14 @@
       if (history.status === "passed" && !isCoolingDown(history, today)) return 2;
       return 3;
     };
-    return [...words].sort((a, b) => score(a) - score(b) || a.wordId.localeCompare(b.wordId));
+    const groups = new Map();
+    for (const word of words) {
+      const key = score(word);
+      groups.set(key, [...(groups.get(key) || []), word]);
+    }
+    return [...groups.keys()]
+      .sort((a, b) => a - b)
+      .flatMap((key) => shuffle(groups.get(key), random));
   }
 
   function pickWords(words, histories, settings, today, random = Math.random) {
@@ -211,8 +218,8 @@
     const available = gradeWords.filter((word) => !isCoolingDown(historyFor(histories, word.wordId), today));
     const selectedCategoryWords = available.filter((word) => categoryIds.includes(word.categoryId));
     const backupWords = available.filter((word) => !categoryIds.includes(word.categoryId));
-    const rankedSelected = rankWords(selectedCategoryWords, histories, today);
-    const rankedBackup = rankWords(backupWords, histories, today);
+    const rankedSelected = rankWords(selectedCategoryWords, histories, today, random);
+    const rankedBackup = rankWords(backupWords, histories, today, random);
     const failedLimit = Math.ceil(settings.wordCount * 0.3);
     const failed = rankedSelected.filter((word) => historyFor(histories, word.wordId).status === "failed").slice(0, failedLimit);
     const notFailed = rankedSelected.filter((word) => !failed.includes(word));

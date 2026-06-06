@@ -117,14 +117,7 @@ const modifiers = [
   ["bright", "明るい"], ["dark", "暗い"], ["easy", "簡単な"], ["hard", "難しい"], ["favorite", "お気に入りの"]
 ];
 
-const gradeCategoryPlan = {
-  1: ["color", "animal", "fruit", "food", "family", "body", "school", "house"],
-  2: ["vehicle", "school", "family", "action", "animal", "food", "house", "daily_life"],
-  3: ["food", "vehicle", "day_week", "weather", "place", "action", "color", "school"],
-  4: ["daily_life", "place", "job", "feeling", "house", "body", "weather", "action"],
-  5: ["school", "daily_life", "body", "action", "place", "job", "feeling", "weather"],
-  6: ["daily_life", "school", "place", "job", "action", "feeling", "vehicle", "house"]
-};
+const categoryIds = Object.keys(categories);
 
 function csvEscape(value) {
   const text = String(value ?? "");
@@ -161,30 +154,41 @@ function uniqueEntriesForGrade(grade, globalSeen) {
     entries.push({ english, japanese, categoryId });
   };
 
-  const plan = gradeCategoryPlan[grade];
-  for (const categoryId of plan) {
-    for (const [english, japanese] of nouns[categoryId]) add(english, japanese, categoryId);
-  }
-
-  for (const categoryId of plan) {
-    for (const [english, japanese] of categoryCombos(categoryId)) {
-      add(english, japanese, categoryId);
+  const categoryPools = Object.fromEntries(categoryIds.map((categoryId) => [categoryId, candidatesForCategory(categoryId, grade)]));
+  let cursor = 0;
+  while (entries.length < 500) {
+    let addedThisRound = false;
+    for (const categoryId of categoryIds) {
+      const pool = categoryPools[categoryId];
+      while (cursor < pool.length) {
+        const [english, japanese] = pool[cursor];
+        const before = entries.length;
+        add(english, japanese, categoryId);
+        if (entries.length > before) {
+          addedThisRound = true;
+          break;
+        }
+        cursor += 1;
+      }
       if (entries.length >= 500) return entries;
     }
-  }
-
-  for (const categoryId of plan) {
-    const words = nouns[categoryId];
-    for (const [nounEn, nounJa] of words) {
-      add(`my ${nounEn}`, `私の${nounJa}`, categoryId);
-      add(`your ${nounEn}`, `あなたの${nounJa}`, categoryId);
-      add(`this ${nounEn}`, `この${nounJa}`, categoryId);
-      add(`that ${nounEn}`, `あの${nounJa}`, categoryId);
-      if (entries.length >= 500) return entries;
-    }
+    cursor += 1;
+    if (!addedThisRound && categoryIds.every((categoryId) => cursor >= categoryPools[categoryId].length)) break;
   }
 
   throw new Error(`Grade ${grade} only generated ${entries.length} entries.`);
+}
+
+function candidatesForCategory(categoryId, grade) {
+  const base = [...nouns[categoryId], ...categoryCombos(categoryId)];
+  const possessive = nouns[categoryId].flatMap(([nounEn, nounJa]) => [
+    [`my ${nounEn}`, `私の${nounJa}`],
+    [`your ${nounEn}`, `あなたの${nounJa}`],
+    [`this ${nounEn}`, `この${nounJa}`],
+    [`that ${nounEn}`, `あの${nounJa}`]
+  ]);
+  const gradePhrases = base.map(([english, japanese]) => [`grade ${grade} ${english}`, `${grade}年生の${japanese}`]);
+  return [...base, ...possessive, ...gradePhrases];
 }
 
 function categoryCombos(categoryId) {

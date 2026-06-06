@@ -98,6 +98,19 @@ test("selected category limits generated study words", () => {
   assert.ok(words.every((word) => word.categoryId === "vehicle"));
 });
 
+test("selected category study words are randomly sampled", () => {
+  const state = Core.initialState();
+  state.settings.wordCount = 2;
+  state.settings.gradeLevel = 3;
+  state.settings.categoryMode = "selected";
+  state.settings.selectedCategoryIds = ["fruit"];
+
+  const first = Core.generateLearningSet(state, new Date("2026-06-06T09:00:00"), () => 0).set.wordIds.join(",");
+  const second = Core.generateLearningSet(state, new Date("2026-06-06T09:00:00"), () => 0.99).set.wordIds.join(",");
+
+  assert.notEqual(first, second);
+});
+
 test("learning set stays active until test submission or explicit finish", () => {
   let state = Core.initialState();
   state.settings.wordCount = 2;
