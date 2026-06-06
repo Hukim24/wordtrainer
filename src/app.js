@@ -371,6 +371,7 @@ function prepareLearningSet() {
 }
 
 function startStudy() {
+  applyHomeSettingsFromForm();
   if (!currentSet()) {
     const result = Core.generateLearningSet(state, new Date());
     if (!result.ok) {
@@ -475,22 +476,26 @@ function moveNextQuestion() {
   switchView("result");
 }
 
-function saveSettings(event) {
-  event.preventDefault();
-  const form = event.currentTarget;
+function readHomeSettingsFromForm() {
+  const form = el.homeSettingsForm;
   const selectedCategory = el.homeCategoryOptions.querySelector("input:checked");
   const selectedCategoryIds = selectedCategory ? [selectedCategory.value] : [];
-  const nextSettings = {
+  const selectedCategoryChanged = selectedCategoryIds[0] && selectedCategoryIds[0] !== state.settings.selectedCategoryIds[0];
+  return {
     ...state.settings,
     learningMode: form.learningMode.value,
     wordCount: Number(form.wordCount.value),
     gradeLevel: Number(form.gradeLevel.value),
-    categoryMode: form.categoryMode.value,
+    categoryMode: selectedCategoryChanged ? "selected" : form.categoryMode.value,
     selectedCategoryIds,
     passThresholdRate: Number(form.passThresholdRate.value),
     cooldownDays: Number(form.cooldownDays.value),
     testFormat: form.testFormat.value
   };
+}
+
+function applyHomeSettingsFromForm() {
+  const nextSettings = readHomeSettingsFromForm();
   const settingsChanged = JSON.stringify(state.settings) !== JSON.stringify(nextSettings);
   state = { ...state, settings: nextSettings };
   if (settingsChanged) {
@@ -499,6 +504,12 @@ function saveSettings(event) {
     reviewWordIds = [];
   }
   saveState();
+  return settingsChanged;
+}
+
+function saveSettings(event) {
+  event.preventDefault();
+  const settingsChanged = applyHomeSettingsFromForm();
   el.homeMessage.textContent = settingsChanged
     ? "設定を保存しました。次に始めると新しい設定で単語を用意します。"
     : "設定を保存しました。";
