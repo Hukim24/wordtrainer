@@ -20,7 +20,6 @@
     ["weather", "天気"],
     ["body", "体"],
     ["house", "家の中"],
-    ["place", "場所"],
     ["job", "職業"],
     ["feeling", "気持ち"],
     ["daily_life", "日常生活"]
@@ -70,8 +69,6 @@
     ["W0030", "yellow", "黄色", 3, "color", "色", "The star is yellow.", "星は黄色です。"],
     ["W0031", "morning", "朝", 4, "daily_life", "日常生活", "Good morning.", "おはようございます。"],
     ["W0032", "night", "夜", 4, "daily_life", "日常生活", "It is night.", "夜です。"],
-    ["W0033", "park", "公園", 4, "place", "場所", "We play in the park.", "私たちは公園で遊びます。"],
-    ["W0034", "library", "図書館", 4, "place", "場所", "The library is quiet.", "図書館は静かです。"],
     ["W0035", "doctor", "医者", 4, "job", "職業", "The doctor helps people.", "医者は人を助けます。"],
     ["W0036", "teacher", "先生", 4, "job", "職業", "The teacher smiles.", "先生が笑います。"],
     ["W0037", "sad", "悲しい", 4, "feeling", "気持ち", "I feel sad.", "私は悲しいです。"],
@@ -90,8 +87,6 @@
     ["W0052", "practice", "練習する", 6, "school", "学校", "I practice English.", "私は英語を練習します。"],
     ["W0053", "important", "大切な", 6, "daily_life", "日常生活", "Family is important.", "家族は大切です。"],
     ["W0054", "different", "違う", 6, "daily_life", "日常生活", "We are different.", "私たちは違います。"],
-    ["W0055", "airport", "空港", 6, "place", "場所", "The airport is far.", "空港は遠いです。"],
-    ["W0056", "museum", "博物館", 6, "place", "場所", "I visit a museum.", "私は博物館へ行きます。"],
     ["W0057", "engineer", "技術者", 6, "job", "職業", "An engineer makes things.", "技術者はものを作ります。"],
     ["W0058", "artist", "芸術家", 6, "job", "職業", "The artist paints.", "芸術家が絵を描きます。"],
   ].map(([wordId, english, japanese, gradeLevel, categoryId, categoryName, exampleEn, exampleJa]) => ({

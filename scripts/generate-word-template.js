@@ -13,7 +13,6 @@ const categories = {
   weather: "天気",
   body: "体",
   house: "家の中",
-  place: "場所",
   job: "職業",
   feeling: "気持ち",
   daily_life: "日常生活"
@@ -78,12 +77,6 @@ const nouns = {
     ["door", "ドア"], ["window", "窓"], ["floor", "床"], ["wall", "壁"], ["roof", "屋根"],
     ["bed", "ベッド"], ["table", "テーブル"], ["sofa", "ソファ"], ["lamp", "ランプ"], ["clock", "時計"],
     ["garden", "庭"], ["stairs", "階段"], ["mirror", "鏡"], ["shelf", "棚"], ["closet", "クローゼット"]
-  ],
-  place: [
-    ["park", "公園"], ["library", "図書館"], ["station", "駅"], ["store", "店"], ["hospital", "病院"],
-    ["zoo", "動物園"], ["museum", "博物館"], ["airport", "空港"], ["bank", "銀行"], ["post office", "郵便局"],
-    ["restaurant", "レストラン"], ["beach", "浜辺"], ["mountain", "山"], ["river", "川"], ["bridge", "橋"],
-    ["city", "市"], ["town", "町"], ["village", "村"], ["market", "市場"], ["hotel", "ホテル"]
   ],
   job: [
     ["doctor", "医者"], ["teacher", "先生"], ["artist", "芸術家"], ["engineer", "技術者"], ["nurse", "看護師"],
@@ -223,12 +216,12 @@ function categoryCombos(categoryId) {
   }
 
   if (categoryId === "job") {
-    const jobPlaces = [
+    const jobContexts = [
       ["school", "学校の"], ["hospital", "病院の"], ["town", "町の"], ["airport", "空港の"], ["station", "駅の"],
       ["zoo", "動物園の"], ["museum", "博物館の"], ["restaurant", "レストランの"], ["farm", "農場の"], ["library", "図書館の"],
       ["kind", "親切な"], ["busy", "忙しい"], ["new", "新しい"], ["famous", "有名な"], ["young", "若い"]
     ];
-    return nouns.job.flatMap(([jobEn, jobJa]) => jobPlaces.map(([placeEn, placeJa]) => [`${placeEn} ${jobEn}`, `${placeJa}${jobJa}`]));
+    return nouns.job.flatMap(([jobEn, jobJa]) => jobContexts.map(([contextEn, contextJa]) => [`${contextEn} ${jobEn}`, `${contextJa}${jobJa}`]));
   }
 
   if (categoryId === "day_week") {

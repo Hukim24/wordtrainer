@@ -111,9 +111,11 @@ test("selected category study words are randomly sampled", () => {
   assert.notEqual(first, second);
 });
 
-test("action category is not offered in the app", () => {
-  assert.equal(Core.CATEGORIES.some((category) => category.id === "action"), false);
-  assert.equal(Core.SEED_WORDS.some((word) => word.categoryId === "action"), false);
+test("removed categories are not offered in the app", () => {
+  for (const categoryId of ["action", "place"]) {
+    assert.equal(Core.CATEGORIES.some((category) => category.id === categoryId), false);
+    assert.equal(Core.SEED_WORDS.some((word) => word.categoryId === categoryId), false);
+  }
 });
 
 test("learning set stays active until test submission or explicit finish", () => {
