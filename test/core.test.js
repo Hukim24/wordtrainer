@@ -84,6 +84,20 @@ test("cooldown words are excluded from the next generation", () => {
   assert.equal(next.set.wordIds.includes(passedWordId), false);
 });
 
+test("selected category limits generated study words", () => {
+  const state = Core.initialState();
+  state.settings.wordCount = 2;
+  state.settings.gradeLevel = 3;
+  state.settings.categoryMode = "selected";
+  state.settings.selectedCategoryIds = ["vehicle"];
+
+  const generated = Core.generateLearningSet(state, new Date("2026-06-06T09:00:00"));
+  const words = Core.wordsForSet(generated.state, generated.set);
+
+  assert.equal(generated.ok, true);
+  assert.ok(words.every((word) => word.categoryId === "vehicle"));
+});
+
 test("learning set stays active until test submission or explicit finish", () => {
   let state = Core.initialState();
   state.settings.wordCount = 2;

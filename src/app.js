@@ -673,6 +673,11 @@ el.studyTestButton.addEventListener("click", startTest);
 el.answerButton.addEventListener("click", answerQuestion);
 el.nextQuestionButton.addEventListener("click", moveNextQuestion);
 el.homeSettingsForm.addEventListener("submit", saveSettings);
+el.homeCategoryOptions.addEventListener("change", (event) => {
+  if (event.target.name === "selectedCategoryId") {
+    el.homeSettingsForm.categoryMode.value = "selected";
+  }
+});
 el.importFile.addEventListener("change", (event) => importWords(event).catch((error) => {
   el.importMessage.textContent = error.message;
 }));
