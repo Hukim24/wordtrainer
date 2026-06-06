@@ -23,6 +23,7 @@ const el = {
   nextWordButton: document.querySelector("#next-word-button"),
   finishStudyButton: document.querySelector("#finish-study-button"),
   studyWordList: document.querySelector("#study-word-list"),
+  studyTestButton: document.querySelector("#study-test-button"),
   testCounter: document.querySelector("#test-counter"),
   testPanel: document.querySelector("#test-panel"),
   answerButton: document.querySelector("#answer-button"),
@@ -95,15 +96,17 @@ function renderHome() {
   const set = currentSet();
   const words = currentSetWords();
   const modeLabel = state.settings.learningMode === "weekly" ? "毎週" : "毎日";
-  const testPlan = set
-    ? set.testAvailableUntil
-      ? `${set.testAvailableFrom}〜${set.testAvailableUntil}`
-      : set.testAvailableFrom
-    : "未定";
+  const categoryLabel = state.settings.categoryMode === "random"
+    ? "ランダム"
+    : state.settings.selectedCategoryIds
+      .map((categoryId) => Core.getCategoryName(categoryId))
+      .join("、");
   el.homeStatus.innerHTML = [
     ["学習モード", modeLabel],
+    ["学年", `小学${state.settings.gradeLevel}年生まで`],
+    ["カテゴリ", categoryLabel || "未設定"],
+    ["1回の単語数", `${state.settings.wordCount}語`],
     ["学習中の単語", `${words.length}語`],
-    ["テスト予定", testPlan],
     ["合格基準", `${state.settings.passThresholdRate}%`],
     ["登録単語数", `${state.words.length.toLocaleString()} / 10,000語`]
   ].map(([label, value]) => `<div class="status-item"><span>${label}</span><strong>${value}</strong></div>`).join("");
@@ -113,6 +116,7 @@ function renderHome() {
 
 function renderStudy() {
   const set = currentSet();
+  el.studyTestButton.disabled = !Core.setIsTestable(set);
   const words = reviewWordIds.length
     ? reviewWordIds.map((wordId) => state.words.find((word) => word.wordId === wordId)).filter(Boolean)
     : Core.wordsForSet(state, set);
@@ -659,6 +663,7 @@ el.studyWordList.addEventListener("click", (event) => {
   const index = Number(event.target.dataset.studyWordIndex);
   if (Number.isInteger(index)) selectStudyWord(index);
 });
+el.studyTestButton.addEventListener("click", startTest);
 el.answerButton.addEventListener("click", answerQuestion);
 el.nextQuestionButton.addEventListener("click", moveNextQuestion);
 el.homeSettingsForm.addEventListener("submit", saveSettings);
