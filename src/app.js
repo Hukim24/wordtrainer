@@ -20,9 +20,9 @@ const el = {
   showWordListButton: document.querySelector("#show-word-list-button"),
   studyCounter: document.querySelector("#study-counter"),
   wordCard: document.querySelector("#word-card"),
-  rememberButton: document.querySelector("#remember-button"),
   nextWordButton: document.querySelector("#next-word-button"),
   finishStudyButton: document.querySelector("#finish-study-button"),
+  studyWordList: document.querySelector("#study-word-list"),
   testCounter: document.querySelector("#test-counter"),
   testPanel: document.querySelector("#test-panel"),
   answerButton: document.querySelector("#answer-button"),
@@ -119,6 +119,7 @@ function renderStudy() {
   if (!words.length) {
     el.studyCounter.textContent = "";
     el.wordCard.innerHTML = `<p class="empty">学習する単語がありません。</p>`;
+    el.studyWordList.innerHTML = `<p class="empty">単語がありません。</p>`;
     return;
   }
   const word = words[Math.min(studyIndex, words.length - 1)];
@@ -130,6 +131,11 @@ function renderStudy() {
     ${word.exampleEn ? `<p class="example">例文：${escapeHtml(word.exampleEn)}</p>` : ""}
     ${word.exampleJa ? `<p class="example">日本語：${escapeHtml(word.exampleJa)}</p>` : ""}
   `;
+  el.studyWordList.innerHTML = words.map((item, index) => `
+    <button class="study-word-button ${index === studyIndex ? "active" : ""}" data-study-word-index="${index}" type="button">
+      ${escapeHtml(item.english)}
+    </button>
+  `).join("");
 }
 
 function renderSettings() {
@@ -379,6 +385,13 @@ function startStudy() {
 function moveNextWord() {
   const count = reviewWordIds.length || currentSetWords().length;
   studyIndex = (studyIndex + 1) % Math.max(count, 1);
+  renderStudy();
+}
+
+function selectStudyWord(index) {
+  const count = reviewWordIds.length || currentSetWords().length;
+  if (index < 0 || index >= count) return;
+  studyIndex = index;
   renderStudy();
 }
 
@@ -641,8 +654,11 @@ el.studyStartButton.addEventListener("click", startStudy);
 el.showWordListButton.addEventListener("click", showLearningWordList);
 el.closeWordListButton.addEventListener("click", () => el.wordListDialog.close());
 el.nextWordButton.addEventListener("click", moveNextWord);
-el.rememberButton.addEventListener("click", moveNextWord);
 el.finishStudyButton.addEventListener("click", finishStudy);
+el.studyWordList.addEventListener("click", (event) => {
+  const index = Number(event.target.dataset.studyWordIndex);
+  if (Number.isInteger(index)) selectStudyWord(index);
+});
 el.answerButton.addEventListener("click", answerQuestion);
 el.nextQuestionButton.addEventListener("click", moveNextQuestion);
 el.homeSettingsForm.addEventListener("submit", saveSettings);

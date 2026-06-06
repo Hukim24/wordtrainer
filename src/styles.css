@@ -257,9 +257,53 @@ nav {
   font-weight: 700;
 }
 
+.study-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 16px;
+  align-items: start;
+}
+
 .word-card {
   min-height: 360px;
   padding: 36px;
+}
+
+.study-word-list {
+  max-height: 420px;
+  padding: 18px;
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.study-word-list h3 {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+}
+
+.study-word-list > div {
+  display: grid;
+  gap: 8px;
+}
+
+.study-word-button {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink);
+  text-align: left;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.study-word-button.active {
+  border-color: var(--primary);
+  background: var(--soft);
+  color: var(--primary-dark);
 }
 
 .word-category {
@@ -620,11 +664,16 @@ th {
 
   .status-grid,
   .record-summary,
+  .study-layout,
   .choice-grid,
   .result-columns,
   .settings-form,
   .word-form {
     grid-template-columns: 1fr;
+  }
+
+  .study-word-list {
+    max-height: 240px;
   }
 
   .word-card {
