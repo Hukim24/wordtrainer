@@ -299,6 +299,27 @@
     return set.status !== "completed";
   }
 
+  function finishLearningSet(state, setId) {
+    const set = state.learningSets.find((item) => item.setId === setId);
+    if (!set) throw new Error("学習セットが見つかりません。");
+    const histories = { ...state.histories };
+    for (const wordId of set.wordIds) {
+      const history = historyFor(histories, wordId);
+      if (history.status === "learning") {
+        histories[wordId] = {
+          ...history,
+          status: "new",
+          cooldownUntil: undefined
+        };
+      }
+    }
+    return {
+      ...state,
+      histories,
+      learningSets: state.learningSets.map((item) => (item.setId === setId ? { ...item, status: "completed" } : item))
+    };
+  }
+
   function wordsForSet(state, set) {
     if (!set) return [];
     return set.wordIds.map((wordId) => state.words.find((word) => word.wordId === wordId)).filter(Boolean);
@@ -503,6 +524,7 @@
     addDays,
     activeSet,
     createQuestions,
+    finishLearningSet,
     generateLearningSet,
     getCategoryName,
     initialState,

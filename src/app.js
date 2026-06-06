@@ -22,6 +22,7 @@ const el = {
   wordCard: document.querySelector("#word-card"),
   rememberButton: document.querySelector("#remember-button"),
   nextWordButton: document.querySelector("#next-word-button"),
+  finishStudyButton: document.querySelector("#finish-study-button"),
   testCounter: document.querySelector("#test-counter"),
   testPanel: document.querySelector("#test-panel"),
   answerButton: document.querySelector("#answer-button"),
@@ -381,6 +382,20 @@ function moveNextWord() {
   renderStudy();
 }
 
+function finishStudy() {
+  const set = currentSet();
+  if (!set) {
+    switchView("home");
+    return;
+  }
+  state = Core.finishLearningSet(state, set.setId);
+  saveState();
+  studyIndex = 0;
+  reviewWordIds = [];
+  el.homeMessage.textContent = "学習を終了しました。次に始めると新しい単語を用意します。";
+  switchView("home");
+}
+
 function startTest() {
   const set = currentSet();
   if (!Core.setIsTestable(set)) return;
@@ -627,6 +642,7 @@ el.showWordListButton.addEventListener("click", showLearningWordList);
 el.closeWordListButton.addEventListener("click", () => el.wordListDialog.close());
 el.nextWordButton.addEventListener("click", moveNextWord);
 el.rememberButton.addEventListener("click", moveNextWord);
+el.finishStudyButton.addEventListener("click", finishStudy);
 el.answerButton.addEventListener("click", answerQuestion);
 el.nextQuestionButton.addEventListener("click", moveNextQuestion);
 el.homeSettingsForm.addEventListener("submit", saveSettings);

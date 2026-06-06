@@ -84,6 +84,23 @@ test("cooldown words are excluded from the next generation", () => {
   assert.equal(next.set.wordIds.includes(passedWordId), false);
 });
 
+test("learning set stays active until test submission or explicit finish", () => {
+  let state = Core.initialState();
+  state.settings.wordCount = 2;
+  const generated = Core.generateLearningSet(state, new Date("2026-06-06T09:00:00"));
+  state = generated.state;
+
+  assert.equal(Core.activeSet(state).setId, generated.set.setId);
+
+  state = Core.finishLearningSet(state, generated.set.setId);
+
+  assert.equal(Core.activeSet(state), undefined);
+  assert.equal(state.learningSets[0].status, "completed");
+  assert.equal(state.testResults.length, 0);
+  assert.equal(state.activityRecords.length, 0);
+  assert.ok(generated.set.wordIds.every((wordId) => state.histories[wordId].status === "new"));
+});
+
 test("import validation reports required field and duplicate errors", () => {
   const rows = [
     {
